@@ -5,6 +5,8 @@ const crypt = new Crypt({md: 'sha512'});
 
 // TODO: Have users add their very own keys (from keybase, or pem files..?)
 // and don't store keys in JSON .-.
+
+if (!fs.existsSync(`${__dirname}/../keys`)) fs.mkdirSync(`${__dirname}/../keys`)
 if (!fs.existsSync(`${__dirname}/../keys/keys.json`)) {
 	console.log('Generating keys...')
 	return rsa.generateKeyPair((keys) => {
