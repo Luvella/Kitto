@@ -13,6 +13,7 @@ class KittoServer {
 				const type = d.trim().split(' - ')[0]
 				const content = d.trim().split(' - ')[1]
 				if (!content) return _endSocket(1);
+				console.log('Client sent: %s - %s', type, content)
 				switch (type) {
 					case 'TRANSMISSION':
 						if (stage !== 0) return _endSocket(2);
@@ -22,6 +23,7 @@ class KittoServer {
 							break;
 
 							case 'END':
+								if (stage !== 3) return _endSocket(2);
 								socket.end()
 							break;
 
@@ -39,11 +41,14 @@ class KittoServer {
 					break;
 
 					case 'CONTENT':
+						if (stage !== 2) return _endSocket(2);
 						console.log(`Someone sent message: ${crypt.decrypt(keys.privateKey, content).message}`);
 						stage++
 					break;
+
+					// No default
 				}
-				//console.log('Client sent: %s - %s', type, content)
+				
 			}, 'utf8', '|');
 
 			socket.on('timeout', () => {

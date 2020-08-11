@@ -6,7 +6,7 @@ class KittoClient {
 	static run(crypt) {
 		const client = net.createConnection({ port: 5335 }, () => {
 			console.log('connected to server!');
-			client.write('TRANSMISSION - START|')
+			client.write('TRANSMISSION - END|')
 			client.write(`CLIENT PUBLIC KEY - ${keys.publicKey}|`)
 		});
 
