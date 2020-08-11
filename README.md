@@ -1,6 +1,7 @@
 # Kitto
 🔌 Secure, P2P messaging made in Node.js.  
 I'm currently looking for feedback on how Kitto should work and what else I should add. If you would give feedback/suggestions, open an issue or talk to me on Discord: `sammy-ette#5336`
+
 # Usage
 Kitto currently isn't in a usable state yet (for anyone) but I promise it will be very soon!
 
@@ -14,7 +15,12 @@ Client sends `TRANSMISSION - START` to tell the server to acknowledge the client
 Client sends public key for encryption. Example: `CLIENT PUBLIC KEY - A CLIENT'S PUBLIC KEY GOES HERE.`  
 Server uses clients public key to encrypt server's public key.  
 Server sends their public key. `SERVER PUBLIC KEY - THE SERVER'S PUBLIC KEY`  
-Client encrypts the message with servers public key.  
-Client sends message to server.  
+Client sends encrypted message to server. `CONTENT - {}` ([An example of the JSON expected](https://github.com/juhoen/hybrid-crypto-js#encryption))  
 Server decrypts message with their private key.  
 Finally, gracefully end the connection with a `TRANSMISSION - END`.
+
+### Errors 
+`1` - Content is missing from transmission. The content is the second half of the transmission. Format: TRANSMISSION TYPE - TRANSMISSION CONTENT  
+`2` - Transmission was out of order. See above for the order to how things should go. (Example: client sends public key before start indicating transmission)  
+`3` - Unexpected content for transmission (Example: CONTENT - PLAINTEXT when it's supposed to be JSON)  
+`4` - Socket timed out  

@@ -1,6 +1,6 @@
 {
   "name": "kitto",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "p2p messaging, much wow",
   "main": "src/index.js",
   "scripts": {
