@@ -6,21 +6,20 @@ const crypt = new Crypt({md: 'sha512'});
 // TODO: Have users add their very own keys (from keybase, or pem files..?)
 // and don't store keys in JSON .-.
 
-if (!fs.existsSync(`${__dirname}/../keys`)) fs.mkdirSync(`${__dirname}/../keys`)
+if (!fs.existsSync(`${__dirname}/../keys`)) fs.mkdirSync(`${__dirname}/../keys`);
 if (!fs.existsSync(`${__dirname}/../keys/keys.json`)) {
-	console.log('Generating keys...')
+	console.log('Generating keys...');
 	return rsa.generateKeyPair((keys) => {
 		fs.appendFileSync(`${__dirname}/../keys/keys.json`, JSON.stringify({
 			publicKey: keys.publicKey,
 			privateKey: keys.privateKey
 		}, null, 4));
-		start()
+		start();
 	});
 }
 
-start()
+start();
 
 function start() {
-	require('./server').run(crypt);
 	require('./client').run(crypt);
 }

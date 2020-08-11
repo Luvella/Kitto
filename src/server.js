@@ -1,17 +1,18 @@
 const net = require('net');
 const keys = require('../keys/keys.json');
 const carrier = require('carrier');
-
+const client = require('./client');
 class KittoServer {
 	static run(crypt) {
 		const server = net.createServer((socket) => {
 			socket.setTimeout(5000);
+			
 			let stage = 0;
 			let ack = true;
 			carrier.carry(socket, (d) => {
-				if(!ack) return;
-				const type = d.trim().split(' - ')[0]
-				const content = d.trim().split(' - ')[1]
+				if (!ack) return;
+				const type = d.trim().split(' - ')[0];
+				const content = d.trim().split(' - ')[1];
 				if (!content) return _endSocket(1);
 				switch (type) {
 					case 'TRANSMISSION':
@@ -19,30 +20,30 @@ class KittoServer {
 						switch (content) {
 							case 'START':
 								stage++;
-							break;
+								break;
 
 							case 'END':
 								if (stage !== 3) return _endSocket(2);
-								socket.end()
-							break;
+								socket.end();
+								break;
 
 							default:
-								_endSocket(3)
-							break;
+								_endSocket(3);
+								break;
 						}
-					break;
+						break;
 
 					case 'CLIENT PUBLIC KEY':
 						if (stage !== 1) return _endSocket(2);
-						socket.write(`SERVER PUBLIC KEY - ${keys.publicKey}|`)
-						stage++
-					break;
+						socket.write(`SERVER PUBLIC KEY - ${keys.publicKey}|`);
+						stage++;
+						break;
 
 					case 'CONTENT':
 						if (stage !== 2) return _endSocket(2);
-						require('./client').messages.log(`${require('./client')._getTime()} Received: ${crypt.decrypt(keys.privateKey, content).message}`);
-						stage++
-					break;
+						client.messages.log(`${client._getTime()} Received: ${crypt.decrypt(keys.privateKey, content).message}`);
+						stage++;
+						break;
 
 					// No default
 				}
@@ -50,27 +51,18 @@ class KittoServer {
 			}, 'utf8', '|');
 
 			socket.on('timeout', () => {
-				//console.log('client timeout');
-				_endSocket(4)
-			});
-			socket.on('close', () => {
-				//console.log('client disconnected');
-				//process.exit()
+				_endSocket(4);
 			});
 
 			function _endSocket(code) {
 				ack = false;
-				socket.end(`ERROR - ${code}`)
+				socket.end(`ERROR - ${code}`);
 			}
-		}).on('error', (err) => {
-			throw err;
-		});
+		}).on('error', err => { throw err; });
 
 		server.listen(5335, () => {
-			console.log('opened server on', server.address());
+			client.messages.log(`${client._getTime()} You are now online.`);
 		});
-
-
 	}
 }
 
