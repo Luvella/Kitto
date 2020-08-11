@@ -40,7 +40,7 @@ class KittoServer {
 
 					case 'CONTENT':
 						if (stage !== 2) return _endSocket(2);
-						console.log(`Someone sent message: ${crypt.decrypt(keys.privateKey, content).message}`);
+						require('./client').messages.log(`${require('./client')._getTime()} Received: ${crypt.decrypt(keys.privateKey, content).message}`);
 						stage++
 					break;
 
@@ -50,11 +50,11 @@ class KittoServer {
 			}, 'utf8', '|');
 
 			socket.on('timeout', () => {
-				console.log('client timeout');
+				//console.log('client timeout');
 				_endSocket(4)
 			});
 			socket.on('close', () => {
-				console.log('client disconnected');
+				//console.log('client disconnected');
 				//process.exit()
 			});
 

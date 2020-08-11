@@ -1,7 +1,7 @@
 {
   "name": "kitto",
-  "version": "0.1.2",
-  "description": "p2p messaging, much wow",
+  "version": "1.0.0",
+  "description": "🔌 Secure, P2P messaging made in Node.js.  ",
   "main": "src/index.js",
   "scripts": {
     "test": "node ."
@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/Luvella/Kitto#readme",
   "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.8.20",
     "carrier": "^0.3.0",
     "hybrid-crypto-js": "^0.2.3"
   },

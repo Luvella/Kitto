@@ -13,7 +13,6 @@ I haven't 100% decided how this will work yet, but here is the idea:
 Client connects to server (another user)  
 Client sends `TRANSMISSION - START` to tell the server to acknowledge the client. If a client doesn't send this first, server closes connection.  
 Client sends public key for encryption. Example: `CLIENT PUBLIC KEY - A CLIENT'S PUBLIC KEY GOES HERE.`  
-Server uses clients public key to encrypt server's public key.  
 Server sends their public key. `SERVER PUBLIC KEY - THE SERVER'S PUBLIC KEY`  
 Client sends encrypted message to server. `CONTENT - {}` ([An example of the JSON expected](https://github.com/juhoen/hybrid-crypto-js#encryption))  
 Server decrypts message with their private key.  
