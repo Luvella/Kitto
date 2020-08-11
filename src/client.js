@@ -9,7 +9,7 @@ class KittoClient {
 	static run(crypt) {
 		const screen = blessed.screen({
 			smartCSR: true,
-			title: "TermTalk Client"
+			title: "Kitto"
 		})
 
 		const form = blessed.form({
@@ -22,7 +22,7 @@ class KittoClient {
 
 		const grid = new contrib.grid({ rows: 10, cols: 10, screen: screen })
 		this.messages = grid.set(0, 0, 9, 10, contrib.log, {
-			label: "General Messages",
+			label: "Inbox",
 			tags: true,
 			style: {
 				fg: "green",
