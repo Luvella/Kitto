@@ -13,7 +13,6 @@ class KittoServer {
 				const type = d.trim().split(' - ')[0]
 				const content = d.trim().split(' - ')[1]
 				if (!content) return _endSocket(1);
-				console.log('Client sent: %s - %s', type, content)
 				switch (type) {
 					case 'TRANSMISSION':
 						if (stage !== 0) return _endSocket(2);
@@ -35,7 +34,6 @@ class KittoServer {
 
 					case 'CLIENT PUBLIC KEY':
 						if (stage !== 1) return _endSocket(2);
-						console.log('Sending public key to client..')
 						socket.write(`SERVER PUBLIC KEY - ${keys.publicKey}|`)
 						stage++
 					break;
@@ -57,7 +55,7 @@ class KittoServer {
 			});
 			socket.on('close', () => {
 				console.log('client disconnected');
-				process.exit()
+				//process.exit()
 			});
 
 			function _endSocket(code) {

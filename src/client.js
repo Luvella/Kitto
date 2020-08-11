@@ -14,10 +14,9 @@ class KittoClient {
 				const type = d.split(' - ')[0]
 				const content = d.split(' - ')[1]
 			if (type === 'SERVER PUBLIC KEY') {
-				console.log('Received server\'s public key.. Encrypting message')
-				client.write(`CONTENT - ${crypt.encrypt(content, 'Hello there, this is kitto!')}|`)
+				console.log('sending message')
+				client.write(`CONTENT - ${crypt.encrypt(content, 'Hello there, this is Kitto!')}|`)
 			}
-			console.log('Server sent: %s - %s', type, content)
 		}, 'utf8', '|');
 
 		client.on('close', () => {
