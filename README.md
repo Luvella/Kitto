@@ -23,7 +23,8 @@ Client sends public key for encryption. Example: `CLIENT PUBLIC KEY - A CLIENT'S
 Server sends their public key. `SERVER PUBLIC KEY - THE SERVER'S PUBLIC KEY`  
 Client sends encrypted message to server. `CONTENT - {}` ([An example of the JSON expected](https://github.com/juhoen/hybrid-crypto-js#encryption))  
 Server decrypts message with their private key.  
-Gracefully end the connection with a `TRANSMISSION - END`.  
+Client sends `TRANSMISSION - END` to end the connection.  
+Server ends the connection with a `SUCCESS - TRUE`.  
 Server informs the user about a received message.
 
 ### Errors 
