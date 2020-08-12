@@ -6,25 +6,28 @@ class KittoServer {
 	static run(crypt) {
 		const server = net.createServer((socket) => {
 			socket.setTimeout(5000);
-			
+
 			let stage = 0;
 			let ack = true;
+			let message = null;
 			carrier.carry(socket, (d) => {
 				if (!ack) return;
 				const type = d.trim().split(' - ')[0];
 				const content = d.trim().split(' - ')[1];
 				if (!content) return _endSocket(1);
+				client.messages.log(`${type} - ${content}`);
 				switch (type) {
 					case 'TRANSMISSION':
-						if (stage !== 0) return _endSocket(2);
 						switch (content) {
 							case 'START':
+								if (stage !== 0) return _endSocket(2);
 								stage++;
 								break;
 
 							case 'END':
 								if (stage !== 3) return _endSocket(2);
-								socket.end();
+								socket.end('SUCCESS - TRUE');
+								client.messages.log(`${client._getTime()} Received: ${message}`);
 								break;
 
 							default:
@@ -41,7 +44,8 @@ class KittoServer {
 
 					case 'CONTENT':
 						if (stage !== 2) return _endSocket(2);
-						client.messages.log(`${client._getTime()} Received: ${crypt.decrypt(keys.privateKey, content).message}`);
+						message = crypt.decrypt(keys.privateKey, content).message
+						client.messages.log(message)
 						stage++;
 						break;
 

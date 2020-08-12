@@ -78,7 +78,9 @@ class KittoClient {
 						if (type === 'SERVER PUBLIC KEY') {
 							this.messages.log(`${this._getTime()} Encrypting and sending message...`);
 							socket.write(`CONTENT - ${crypt.encrypt(content, args.slice(1).join(' '))}|`);
+							socket.write('TRANSMISSION - END|')
 						}
+						this.messages.log(d)
 					}, 'utf8', '|');
 					
 					// TODO: Make this less vague
