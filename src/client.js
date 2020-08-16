@@ -1,8 +1,8 @@
 const net = require('net');
-const keys = require('../keys/keys.json');
+const kitto = require('../lib');
 const carrier = require('carrier');
-const blessed = require('blessed')
-const contrib = require('blessed-contrib')
+const blessed = require('blessed');
+const contrib = require('blessed-contrib');
 
 class KittoClient {
 	static messages = null;
@@ -37,7 +37,7 @@ class KittoClient {
 			bufferLength: screen.height
 		});
 
-		let messageBox = blessed.textarea({
+		const messageBox = blessed.textarea({
 			parent: form,
 			name: 'msg',
 			top: '94%',
@@ -50,8 +50,9 @@ class KittoClient {
 				border: {fg: 'cyan'}
 			}
 		});
+		messageBox.focus();
 
-		require('./server').run(crypt);
+		require('./Server').run(crypt);
 
 		messageBox.key('enter', () => form.submit());
 		form.on('submit', () => {
@@ -67,9 +68,9 @@ class KittoClient {
 					if (!args[0]) return this.messages.log(`${this._getTime()} Missing IP of person to send to.`);
 					if (!args[1]) return this.messages.log(`${this._getTime()} Missing message to send to user.`);
 					this.messages.log(`${this._getTime()} Connecting to user...`);
-					const socket = net.createConnection({ host: args[0], port: 5335 }, () => {
+					const socket = net.createConnection({host: args[0], port: 5335}, () => {
 						socket.write('TRANSMISSION - START|');
-						socket.write(`CLIENT PUBLIC KEY - ${keys.publicKey}|`);
+						socket.write(`CLIENT PUBLIC KEY - ${kitto.keys.publicKey}|`);
 					});
 
 					carrier.carry(socket, (d) => {
@@ -78,32 +79,31 @@ class KittoClient {
 						if (type === 'SERVER PUBLIC KEY') {
 							this.messages.log(`${this._getTime()} Encrypting and sending message...`);
 							socket.write(`CONTENT - ${crypt.encrypt(content, args.slice(1).join(' '))}|`);
-							socket.write('TRANSMISSION - END|')
+							socket.write('TRANSMISSION - END|');
 						}
-						this.messages.log(d)
 					}, 'utf8', '|');
 					
 					// TODO: Make this less vague
 					socket.on('close', () => { this.messages.log(`${this._getTime()} Disconnected. This should mean a success.`); });
-				break;
+					break;
 
 				// No default
 			}
-		})
+		});
 
 		screen.key(['q', 'C-c'], () => { process.exit(); });
 
 		screen.render();
 	}
 
-	static _getTime(timestamp) {
+	static _getTime() {
 		const options = {
 			hour: 'numeric',
 			minute: 'numeric',
 			second: 'numeric',
 			hour12: true
 		};
-		return `[${new Intl.DateTimeFormat({}, options).format(new Date())}]`
+		return `[${new Intl.DateTimeFormat({}, options).format(new Date())}]`;
 	}
 }
 

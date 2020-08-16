@@ -1,7 +1,8 @@
 const net = require('net');
-const keys = require('../keys/keys.json');
+const kitto = require('../lib');
 const carrier = require('carrier');
-const client = require('./client');
+const client = require('./Client');
+
 class KittoServer {
 	static run(crypt) {
 		const server = net.createServer((socket) => {
@@ -15,7 +16,6 @@ class KittoServer {
 				const type = d.trim().split(' - ')[0];
 				const content = d.trim().split(' - ')[1];
 				if (!content) return _endSocket(1);
-				client.messages.log(`${type} - ${content}`);
 				switch (type) {
 					case 'TRANSMISSION':
 						switch (content) {
@@ -38,14 +38,13 @@ class KittoServer {
 
 					case 'CLIENT PUBLIC KEY':
 						if (stage !== 1) return _endSocket(2);
-						socket.write(`SERVER PUBLIC KEY - ${keys.publicKey}|`);
+						socket.write(`SERVER PUBLIC KEY - ${kitto.keys.publicKey}|`);
 						stage++;
 						break;
 
 					case 'CONTENT':
 						if (stage !== 2) return _endSocket(2);
-						message = crypt.decrypt(keys.privateKey, content).message
-						client.messages.log(message)
+						message = crypt.decrypt(kitto.keys.privateKey, content).message;
 						stage++;
 						break;
 

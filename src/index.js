@@ -6,14 +6,12 @@ const crypt = new Crypt({md: 'sha512'});
 // TODO: Have users add their very own keys (from keybase, or pem files..?)
 // and don't store keys in JSON .-.
 
-if (!fs.existsSync(`${__dirname}/../keys`)) fs.mkdirSync(`${__dirname}/../keys`);
-if (!fs.existsSync(`${__dirname}/../keys/keys.json`)) {
+if (!fs.existsSync(`${__dirname}/../data`)) fs.mkdirSync(`${__dirname}/../data`);
+if (!fs.existsSync(`${__dirname}/../data/pub.pem`) && !fs.existsSync(`${__dirname}/../data/priv.pem`)) {
 	console.log('Generating keys...');
 	return rsa.generateKeyPair((keys) => {
-		fs.appendFileSync(`${__dirname}/../keys/keys.json`, JSON.stringify({
-			publicKey: keys.publicKey,
-			privateKey: keys.privateKey
-		}, null, 4));
+		fs.appendFileSync(`${__dirname}/../data/pub.pem`, keys.publicKey);
+		fs.appendFileSync(`${__dirname}/../data/priv.pem`, keys.privateKey);
 		start();
 	});
 }
@@ -21,5 +19,8 @@ if (!fs.existsSync(`${__dirname}/../keys/keys.json`)) {
 start();
 
 function start() {
-	require('./client').run(crypt);
+	if (!fs.existsSync(`${__dirname}/../data/conf.json`)) fs.appendFileSync(`${__dirname}/../data/conf.json`, JSON.stringify({welcome: true}, null, 4));
+	if (require('../data/conf.json').welcome) return require('./WelcomeScreen').run(crypt);
+
+	require('./Client').run(crypt);
 }
