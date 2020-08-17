@@ -3,8 +3,12 @@
 🔌 Encrypted P2P messaging protocol/client and server, made in Node.js.  
 I'm currently looking for feedback on how Kitto should work and what else I should add. If you would give feedback/suggestions, feel free to open an issue.
 
-Kitto ~~should be~~ is currently usable right now. Try it out! Get a friend to use it and try sending each other messages.
+Kitto ~~should be~~ is currently usable right now. Try it out! Get a friend to use it and try sending each other messages.  
 
+<br>
+<br>
+<br>
+<br>
 
 # Install
 ```
