@@ -49,7 +49,7 @@ class KittoWelcomeScreen {
 			content: 'Press Enter to start using Kitto! Once you are in the interface,\nyou can type anything and you can get help from there.\nTo exit: press Q or Ctrl-C,\nto check the box: press TAB then space.',
 			top: 10,
 			left: 38
-		})
+		});
 
 		const checkbox = blessed.checkbox({
 			parent: box,
@@ -57,7 +57,7 @@ class KittoWelcomeScreen {
 			text: 'Don\'t show this screen again',
 			left: "center",
 			top: 18
-		})
+		});
 
 		blessed.text({
 			parent: form,
