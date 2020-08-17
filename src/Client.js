@@ -3,6 +3,7 @@ const kitto = require('../lib');
 const carrier = require('carrier');
 const blessed = require('blessed');
 const contrib = require('blessed-contrib');
+const conf = require('../data/conf.json');
 
 class KittoClient {
 	static messages = null;
@@ -52,7 +53,7 @@ class KittoClient {
 		});
 		messageBox.focus();
 
-		const server = require('./Server')
+		const server = require('./Server');
 		if (server.running) this.log(`You are now online.`);
 		else server.run(crypt);
 
@@ -95,43 +96,41 @@ class KittoClient {
 							socket.write('TRANSMISSION - END|');
 							break;
 
-							case 'SUCCESS':
-								socket.emit('success');
-								break;
+						case 'SUCCESS':
+							socket.emit('success');
+							break;
 
-							case 'ERROR':
-								socket.emit('kittoError', content);
-								break;
-						}
-					}, 'utf8', '|');
+						case 'ERROR':
+							socket.emit('kittoError', content);
+							break;
+					}
+				}, 'utf8', '|');
 					
-					socket.on('success', () => this.log(`Successfully sent the message!`));
-					socket.on('kittoError', (code) => this.log(`Could not send successfully. Received error code: ${code}`));
+				socket.on('success', () => this.log(`Successfully sent the message!`));
+				socket.on('kittoError', (code) => this.log(`Could not send successfully. Received error code: ${code}`));
 
-					socket.on('error', (err) => {
-						switch (err.code) {
-							case 'ENOTFOUND':
-								this.log(`Could not connect. Person is either offline or not a Kitto user.`);
-								break;
+				socket.on('error', (err) => {
+					switch (err.code) {
+						case 'ENOTFOUND':
+							this.log(`Could not connect. Person is either offline or not a Kitto user.`);
+							break;
 
-							default:
-								throw err;
-								break;
-						}
-					});
-					break;
+						default:
+							throw err;
+							break;
+					}
+				});
+				break;
 
-					case 'refresh':
-						screen.destroy();
-						delete require.cache[require.resolve('./Client')];
-						require('./Client').run(crypt);
-						return true
-						break;
+			case 'refresh':
+				screen.destroy();
+				delete require.cache[require.resolve('./Client')];
+				require('./Client').run(crypt);
+				break;
 
-				default:
-					this.log('You are in an empty void. The only thing you can do is: "/send <ip> <message>"');
-					break;
-
+			default:
+				this.log('You are in an empty void. The only thing you can do is: "/send <ip> <message>"');
+				break;
 			}
 	}
 
