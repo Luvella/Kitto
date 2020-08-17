@@ -76,15 +76,25 @@ class KittoClient {
 					carrier.carry(socket, (d) => {
 						const type = d.split(' - ')[0];
 						const content = d.split(' - ')[1];
-						if (type === 'SERVER PUBLIC KEY') {
-							this.messages.log(`${this._getTime()} Encrypting and sending message...`);
-							socket.write(`CONTENT - ${crypt.encrypt(content, args.slice(1).join(' '))}|`);
-							socket.write('TRANSMISSION - END|');
+						switch (type) {
+							case 'SERVER PUBLIC KEY':
+								this.messages.log(`${this._getTime()} Encrypting and sending message...`);
+								socket.write(`CONTENT - ${crypt.encrypt(content, args.slice(1).join(' '))}|`);
+								socket.write('TRANSMISSION - END|');
+								break;
+
+							case 'SUCCESS':
+								socket.emit('success');
+								break;
+
+							case 'ERROR':
+								socket.emit('kittoError', content);
+								break;
 						}
 					}, 'utf8', '|');
 					
-					// TODO: Make this less vague
-					socket.on('close', () => { this.messages.log(`${this._getTime()} Disconnected. This should mean a success.`); });
+					socket.on('success', () => { this.messages.log(`${this._getTime()} Successfully sent the message!`); })
+					socket.on('kittoError', code => { this.messages.log(`${this._getTime()} Could not send successfully. Received error code: ${code}`); })
 					break;
 
 				// No default
