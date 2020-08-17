@@ -1,7 +1,7 @@
 const net = require('net');
 const kitto = require('../lib');
 const carrier = require('carrier');
-const client = require('./Client');
+let client = require('./Client');
 
 class KittoServer {
 	static running = false;
@@ -29,7 +29,7 @@ class KittoServer {
 							case 'END':
 								if (stage !== 3) return _endSocket(2);
 								socket.end('SUCCESS - TRUE');
-								client.messages.log(`${client._getTime()} Received: ${message}`);
+								client.log(`Received: ${message}`);
 								break;
 
 							default:
@@ -67,8 +67,13 @@ class KittoServer {
 
 		server.listen(5335, () => {
 			this.running = true;
-			client.messages.log(`${client._getTime()} You are now online.`);
+			client.log(`You are now online.`);
 		});
+	}
+
+	static refresh() {
+		delete require.cache[require.resolve('./Client')];
+		client = require('./Client');
 	}
 }
 
