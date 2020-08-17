@@ -16,7 +16,7 @@ if (!fs.existsSync(`${__dirname}/../data/pub.pem`) || !fs.existsSync(`${__dirnam
 start();
 
 function start() {
-	if (!fs.existsSync(`${__dirname}/../data/conf.json`)) fs.appendFileSync(`${__dirname}/../data/conf.json`, JSON.stringify({welcome: true}, null, 4));
+	if (!fs.existsSync(`${__dirname}/../data/conf.json`)) fs.writeFileSync(`${__dirname}/../data/conf.json`, JSON.stringify({welcome: true}, null, 4));
 	if (require('../data/conf.json').welcome) return require('./WelcomeScreen').run(crypt);
 
 	require('./Client').run(crypt);
