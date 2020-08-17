@@ -1,5 +1,6 @@
 const blessed = require('blessed');
 const contrib = require('blessed-contrib');
+const kitto = require('../lib');
 
 class KittoWelcomeScreen {
 	static run(crypt) {
@@ -68,6 +69,7 @@ class KittoWelcomeScreen {
 
 		screen.key('enter', () => { 
 			screen.destroy()
+			if (checkbox.checked) kitto.conf.welcome(false);
 			require('./Client').run(crypt);
 		});
 		screen.key(['q', 'C-c'], () => { process.exit(); });
