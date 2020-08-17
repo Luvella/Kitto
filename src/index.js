@@ -3,9 +3,6 @@ const {RSA, Crypt} = require('hybrid-crypto-js');
 const rsa = new RSA();
 const crypt = new Crypt({md: 'sha512'});
 
-// TODO: Have users add their very own keys (from keybase, or pem files..?)
-// and don't store keys in JSON .-.
-
 if (!fs.existsSync(`${__dirname}/../data`)) fs.mkdirSync(`${__dirname}/../data`);
 if (!fs.existsSync(`${__dirname}/../data/pub.pem`) && !fs.existsSync(`${__dirname}/../data/priv.pem`)) {
 	console.log('Generating keys...');
