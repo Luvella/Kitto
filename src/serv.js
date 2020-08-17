@@ -4,6 +4,8 @@ const carrier = require('carrier');
 const client = require('./Client');
 
 class KittoServer {
+	static running = false;
+	
 	static run(crypt) {
 		const server = net.createServer((socket) => {
 			socket.setTimeout(5000);
@@ -64,6 +66,7 @@ class KittoServer {
 		}).on('error', err => { throw err; });
 
 		server.listen(5335, () => {
+			this.running = true;
 			client.messages.log(`${client._getTime()} You are now online.`);
 		});
 	}
