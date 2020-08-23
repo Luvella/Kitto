@@ -1,9 +1,14 @@
-# Kitto
-🔌 Secure, P2P messaging made in Node.js.  
+<img align="left" src="https://github.com/Luvella/Kitto/blob/master/kitto.png" width=256>
+
+🔌 Encrypted P2P messaging protocol/client and server, made in Node.js.  
 I'm currently looking for feedback on how Kitto should work and what else I should add. If you would give feedback/suggestions, feel free to open an issue.
 
-# Usage
-I don't know about sending to other users yet, but Kitto is technically usable right now, as you can send to the local server. See [Install](#install) for how to install and use.
+Kitto ~~should be~~ is currently usable right now. Try it out! Get a friend to use it and try sending each other messages.  
+
+<br>
+<br>
+<br>
+<br>
 
 # Discord Webhook
 You can setup a Discord webhook to post messages received to a channel. Just add `"webhook": "url"` to `conf.json`.
