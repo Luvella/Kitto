@@ -1,6 +1,8 @@
 const net = require('net');
-const kitto = require('../lib');
+const https = require('https');
 const carrier = require('carrier');
+const kitto = require('../lib');
+const { URL } = require('url');
 let client = require('./Client');
 
 class KittoServer {
@@ -30,6 +32,32 @@ class KittoServer {
 								if (stage !== 3) return _endSocket(2);
 								socket.end('SUCCESS - TRUE');
 								client.log(`Received: ${message}`);
+								try {
+									const webhook = new URL(kitto.conf.data.webhook)
+									const req = https.request({
+										hostname: webhook.hostname,
+										path: webhook.pathname,
+										method: 'POST',
+										headers: {
+											'Content-Type': 'application/json'
+										}
+									}, _ => {});
+
+									req.write(JSON.stringify({
+										username: 'Kitto',
+										embeds: [{
+											color: 0xFF8CEF,
+											title: `New message from ${socket.remoteAddress}`,
+											description: message,
+											footer: {
+												text: `Kitto v${require('../package.json').version}`
+											}
+										}]
+									})); 
+									req.end();
+								} catch {
+									client.log('Could not post to Discord webhook. Reason: Invalid webhook URL in config')
+								}
 								break;
 
 							default:

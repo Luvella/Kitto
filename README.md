@@ -5,6 +5,9 @@ I'm currently looking for feedback on how Kitto should work and what else I shou
 # Usage
 I don't know about sending to other users yet, but Kitto is technically usable right now, as you can send to the local server. See [Install](#install) for how to install and use.
 
+# Discord Webhook
+You can setup a Discord webhook to post messages received to a channel. Just add `"webhook": "url"` to `conf.json`.
+
 # Install
 ```
 git clone https://github.com/Luvella/Kitto
